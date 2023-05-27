@@ -1,6 +1,7 @@
 #include "redBlackTree.h"
 
-RedBlackTree::RedBlackTree() {
+template <typename Key, typename Value>
+RedBlackTree<Key, Value>::RedBlackTree() {
     null = new Node;
     null->isRed = false;
     null->left = nullptr;
@@ -8,12 +9,14 @@ RedBlackTree::RedBlackTree() {
     root = null;
 }
 
-RedBlackTree::~RedBlackTree() {
+template <typename Key, typename Value>
+RedBlackTree<Key, Value>::~RedBlackTree() {
     _deleteTree(root);
     delete null;
 }
 
-void RedBlackTree::add(int key, int value) {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::add(Key key, Value value) {
     if (root == null) {
         root = new Node;
         root->key = key;
@@ -27,27 +30,34 @@ void RedBlackTree::add(int key, int value) {
     }
 }
 
-void RedBlackTree::remove(int key) {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::remove(Key key) {
     if (root == null) {
-        // Árvore vazia, não há nada a remover
         throw std::invalid_argument("A árvore está vazia, não há nada para remover");
     }
     _remove(root, key);
 }
 
-int RedBlackTree::get(int key) {
+template <typename Key, typename Value>
+Value RedBlackTree<Key, Value>::get(Key key) {
     Node* node = _get(root, key);
     if (node != null) {
         return node->value;
     }
     else {
-        // Retornar um valor padrão ou lançar uma exceção caso a chave não seja encontrada
         throw std::invalid_argument("Chave não encontrada");
     }
-
 }
 
-void RedBlackTree::_rotateLeft(Node* node) {
+template <typename Key, typename Value>
+std::vector<Value> RedBlackTree<Key, Value>::getByRange(Key minKey, Key maxKey) {
+    std::vector<Value> result;
+    _getByRange(root, minKey, maxKey, result);
+    return result;
+}
+
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::_rotateLeft(Node* node) {
     Node* rightChild = node->right;
     node->right = rightChild->left;
 
@@ -69,7 +79,8 @@ void RedBlackTree::_rotateLeft(Node* node) {
     node->parent = rightChild;
 }
 
-void RedBlackTree::_rotateRight(Node* node) {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::_rotateRight(Node* node) {
     Node* leftChild = node->left;
     node->left = leftChild->right;
 
@@ -91,7 +102,8 @@ void RedBlackTree::_rotateRight(Node* node) {
     node->parent = leftChild;
 }
 
-void RedBlackTree::_fix(Node* node) {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::_fix(Node* node) {
     while (node != root && node->parent->isRed) {
         if (node->parent == node->parent->parent->left) {
             Node* uncle = node->parent->parent->right;
@@ -135,7 +147,8 @@ void RedBlackTree::_fix(Node* node) {
     root->isRed = false;
 }
 
-void RedBlackTree::_fixRemove(Node* node) {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::_fixRemove(Node* node) {
     while (node != root && !node->isRed) {
         if (node == node->parent->left) {
             Node* sibling = node->parent->right;
@@ -195,7 +208,8 @@ void RedBlackTree::_fixRemove(Node* node) {
     }
 }
 
-void RedBlackTree::_add(Node* node, int key, int value) {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::_add(Node* node, Key key, Value value) {
     if (key < node->key) {
         if (node->left != null) {
             _add(node->left, key, value);
@@ -229,12 +243,12 @@ void RedBlackTree::_add(Node* node, int key, int value) {
             _fix(newNode);
         }
     } else {
-        // A chave já existe na árvore. Você pode optar por substituir o valor ou realizar outra ação.
         return;
     }
 }
 
-void RedBlackTree::_remove(Node* node, int key) {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::_remove(Node* node, Key key) {
     Node* current = node;
     while (current != null) {
         if (key < current->key) {
@@ -283,21 +297,24 @@ void RedBlackTree::_remove(Node* node, int key) {
     delete toRemove;
 }
 
-RedBlackTree::Node* RedBlackTree::_getMin(Node* node) {
+template <typename Key, typename Value>
+typename RedBlackTree<Key, Value>::Node* RedBlackTree<Key, Value>::_getMin(Node* node) {
     while (node->left != null) {
         node = node->left;
     }
     return node;
 }
 
-RedBlackTree::Node* RedBlackTree::_getMax(Node* node) {
+template <typename Key, typename Value>
+typename RedBlackTree<Key, Value>::Node* RedBlackTree<Key, Value>::_getMax(Node* node) {
     while (node->right != null) {
         node = node->right;
     }
     return node;
 }
 
-RedBlackTree::Node* RedBlackTree::_get(Node* node, int key) {
+template <typename Key, typename Value>
+typename RedBlackTree<Key, Value>::Node* RedBlackTree<Key, Value>::_get(Node* node, Key key) {
     if (node == null || key == node->key) {
         return node;
     }
@@ -309,7 +326,28 @@ RedBlackTree::Node* RedBlackTree::_get(Node* node, int key) {
     }
 }
 
-void RedBlackTree::_deleteTree(Node* node) {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::_getByRange(Node* node, Key minKey, Key maxKey, std::vector<Value>& result) {
+    // std::cout << node->key << " " << (node->key > maxKey) << " " << (node->key < minKey) << std::endl;
+    if (node == null) {
+        return;
+    }
+
+    if (node->key > maxKey) {
+        _getByRange(node->left, minKey, maxKey, result);
+    }
+    else if (node->key < minKey) {
+        _getByRange(node->right, minKey, maxKey, result);
+    }
+    else {
+        _getByRange(node->left, minKey, maxKey, result);
+        result.push_back(node->value);
+        _getByRange(node->right, minKey, maxKey, result);
+    }
+}
+
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::_deleteTree(Node* node) {
     if (node != null) {
         _deleteTree(node->left);
         _deleteTree(node->right);
@@ -319,15 +357,16 @@ void RedBlackTree::_deleteTree(Node* node) {
 
 // Dentro da classe RedBlackTree
 
-void RedBlackTree::print() {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::print() {
     _print(root);
 }
 
-void RedBlackTree::_print(Node* node) {
+template <typename Key, typename Value>
+void RedBlackTree<Key, Value>::_print(Node* node) {
     if (node != null) {
         _print(node->left);
         std::cout << "Chave: " << node->key << ", Valor: " << node->value << ", Cor: " << (node->isRed ? "Vermelho" : "Preto") << std::endl;
         _print(node->right);
     }
 }
-

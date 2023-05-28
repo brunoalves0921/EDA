@@ -25,6 +25,10 @@ void Menu() {
 }
 
 std::string transformDate(const std::string& date) {
+    // 11/10/1972
+    // 1972 10 11
+    // 1972 09 30
+
     // Encontra as posições das barras no formato da data
     size_t firstSlashPos = date.find('/');
     size_t lastSlashPos = date.rfind('/');
@@ -33,6 +37,8 @@ std::string transformDate(const std::string& date) {
     std::string month = date.substr(0, firstSlashPos);
     std::string day = date.substr(firstSlashPos + 1, lastSlashPos - firstSlashPos - 1);
     std::string year = date.substr(lastSlashPos + 1);
+    if (month.size() == 1) month = "0" + month;
+    if (day.size() == 1) day = "0" + day;
 
     // Concatena os elementos invertidos para formar a nova data
     std::string transformedDate = year + month + day;
@@ -41,6 +47,12 @@ std::string transformDate(const std::string& date) {
 }
 
 std::string getNextName(const std::string& name) {
+    // joão
+    // joãp
+
+    // josé
+    // josê
+    // josê < josé fulano de tao > josé
     std::string result = name;
 
     if (!result.empty()) {
@@ -92,6 +104,9 @@ int main() {
         nameTree.add(person.getFirstName() + " " + person.getLastName(), &person);
         dateTree.add(transformDate(person.getBirthDate()), &person);
     }
+    std::cout << "---------------------------------------------" << std::endl;
+    std::cout << "Dados carregados com sucesso!" << std::endl;
+    std::cout << "---------------------------------------------" << std::endl;
     int option;
     std::string cpfToSearch;
     std::string nameToSearch;
@@ -121,8 +136,12 @@ int main() {
         } else if (option == 2) {
             std::cout << "Digite o nome da pessoa: ";
             std::cin >> nameToSearch;
-            try {
-                std::vector<const Person*> persons = nameTree.getByRange(nameToSearch, getNextName(nameToSearch));
+            std::vector<const Person*> persons = nameTree.getByRange(nameToSearch, getNextName(nameToSearch));
+            if (persons.empty()) {
+                std::cout << "---------------------------------------------" << std::endl;
+                std::cout << "Não foi encontrando nenhum usuário com o nome " << nameToSearch << " como chave." << std::endl;
+            }
+            else {
                 std::cout << "---------------------------------------------" << std::endl;
                 std::cout << "Usuários encontrados usando o nome " << nameToSearch << " como chave:" << std::endl;
                 for (auto person: persons) {
@@ -133,17 +152,19 @@ int main() {
                     std::cout << "- Endereço: " << person->getAddress() << std::endl;
                     std::cout << std::endl;
                 }
-            } catch (std::invalid_argument& e) {
-                std::cout << "Dados não encontrados usando Nome como chave." << std::endl;
             }
         } else if (option == 3) {
             std::cout << "Digite a data de nascimento inicial: ";
             std::cin >> dateToSearch1;
             std::cout << "Digite a data de nascimento final: ";
             std::cin >> dateToSearch2;
-            try {
+            std::vector<const Person*> persons = dateTree.getByRange(transformDate(dateToSearch1), transformDate(dateToSearch2));
+            if (persons.empty()) {
+                std::cout << "---------------------------------------------" << std::endl;
+                std::cout << "Não foi encontrando nenhum usuário com a data de nascimento entre " << dateToSearch1 << " e " << dateToSearch2 << " como chave." << std::endl;
+            }
+            else {
                 std::cout << "Usuários encontrados usando Data como chave de ("<< dateToSearch1 <<") até (" << dateToSearch2 << ":" << std::endl;
-                std::vector<const Person*> persons = dateTree.getByRange(transformDate(dateToSearch1), transformDate(dateToSearch2));
                 for (auto person: persons) {
                     std::cout << "---------------------------------------------" << std::endl;
                     std::cout << "- CPF: " << person->getCPF() << std::endl;
@@ -152,8 +173,6 @@ int main() {
                     std::cout << "- Endereço: " << person->getAddress() << std::endl;
                     std::cout << std::endl;
                 }
-            } catch (std::invalid_argument& e) {
-                std::cout << "Dados não encontrados usando Data como chave." << std::endl;
             }
         } else if (option == 4) {
             break;

@@ -80,17 +80,4 @@ public:
     }
 };
 
-// void printData(const std::map<std::string, Person>& people) {
-//     for (const auto& pair : people) {
-//         const std::string& cpf = pair.first;
-//         const Person& person = pair.second;
-
-//         std::cout << "CPF: " << cpf << std::endl;
-//         std::cout << "Nome: " << person.getFirstName() << " " << person.getLastName() << std::endl;
-//         std::cout << "Data de Nascimento: " << person.getBirthDate() << std::endl;
-//         std::cout << "Endereço: " << person.getAddress() << std::endl;
-//         std::cout << std::endl;
-//     }
-// }
-
 #endif

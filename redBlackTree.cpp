@@ -49,7 +49,7 @@ Value RedBlackTree<Key, Value>::get(Key key) {
     }
 }
 
-template <typename Key, typename Value>
+template <typename Key, typename Value>  // todos os valores tal que minKey <= key <= maxKey
 std::vector<Value> RedBlackTree<Key, Value>::getByRange(Key minKey, Key maxKey) {
     std::vector<Value> result;
     _getByRange(root, minKey, maxKey, result);
@@ -226,7 +226,7 @@ void RedBlackTree<Key, Value>::_add(Node* node, Key key, Value value) {
 
             _fix(newNode);
         }
-    } else if (key > node->key) {
+    } else {
         if (node->right != null) {
             _add(node->right, key, value);
         } else {
@@ -242,8 +242,6 @@ void RedBlackTree<Key, Value>::_add(Node* node, Key key, Value value) {
 
             _fix(newNode);
         }
-    } else {
-        return;
     }
 }
 
@@ -328,7 +326,6 @@ typename RedBlackTree<Key, Value>::Node* RedBlackTree<Key, Value>::_get(Node* no
 
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::_getByRange(Node* node, Key minKey, Key maxKey, std::vector<Value>& result) {
-    // std::cout << node->key << " " << (node->key > maxKey) << " " << (node->key < minKey) << std::endl;
     if (node == null) {
         return;
     }

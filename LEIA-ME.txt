@@ -1,0 +1,62 @@
+======================================================
+                LEIA-ME
+======================================================
+
+Bem-vindo ao projeto "Aplicação de árvores balanceadas"!
+
+Este sistema foi desenvolvido para um projeto da disciplina de Estrutura de Dados Avançada. Ele permite o armazenamento e busca de informações de pessoas, utilizando árvores binárias de busca, neste caso árvore Rubro-negra.
+
+======================================================
+                Instruções de Uso
+======================================================
+
+1. Compilação e Execução em ambiente Linux:
+
+   - Abra o terminal ou prompt de comando.
+   - Navegue até o diretório do projeto.
+   - Execute o comando de compilação para criar o executável:
+       $ g++ main.cpp -o main
+   - Execute o programa:
+       $ ./main
+
+2. Menu Principal:
+
+   O sistema possui um menu interativo com as seguintes opções:
+
+   1 - Buscar por CPF: Permite buscar uma pessoa pelo CPF.
+   2 - Buscar por Nome: Permite buscar pessoas pelo nome.
+   3 - Buscar por Data: Permite buscar pessoas por data de nascimento.
+   4 - Sair: Encerra o programa.
+
+3. Busca por CPF:
+
+   Ao selecionar a opção 1 no menu, digite o CPF da pessoa que deseja buscar e pressione Enter. O sistema exibirá os dados encontrados, se houver correspondência.
+
+4. Busca por Nome:
+
+   Ao selecionar a opção 2 no menu, digite o nome da pessoa que deseja buscar e pressione Enter. O sistema exibirá os dados de todas as pessoas cujo nome corresponda à pesquisa.
+
+5. Busca por Data:
+
+   Ao selecionar a opção 3 no menu, digite a data de nascimento inicial e a data de nascimento final (no formato mm/dd/aaaa) e pressione Enter. O sistema exibirá os dados de todas as pessoas cuja data de nascimento esteja dentro desse intervalo.
+
+6. Encerrando o Programa:
+
+   Para encerrar o programa, selecione a opção 4 no menu.
+
+======================================================
+                Informações Adicionais
+======================================================
+
+- Os dados das pessoas são armazenados em arquivos CSV.
+- O código fonte está organizado em arquivos separados para maior legibilidade e modularidade.
+- As árvores binárias de busca são utilizadas para indexar os dados por CPF, nome e data de nascimento.
+- As buscas são realizadas de forma eficiente, aproveitando a estrutura das árvores binárias de busca.
+- Certifique-se de fornecer os dados corretamente no formato especificado.
+======================================================
+                Dados do Aluno
+======================================================
+Nome: Jorge Bruno Costa Alves
+Matrícula: 509718
+E-mail: jorge.bruno0921@alu.ufc.br
+Curso: Ciência da Computação
